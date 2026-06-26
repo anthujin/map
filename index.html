@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>OJ KIM Route Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQpSiA3X+qNXCD7xw6iYfM+lmyEEmhI=" crossorigin="" />
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #f7f4ee;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+    }
+    #map {
+      width: 100vw;
+      height: 100vh;
+      background: #f7f4ee;
+    }
+    .leaflet-container {
+      background: #f7f4ee;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+    }
+    .leaflet-control-zoom a {
+      color: #162746;
+      border: none;
+      background: rgba(255,255,255,0.92);
+    }
+    .leaflet-control-attribution {
+      font-size: 10px;
+      color: rgba(22,39,70,0.6);
+      background: rgba(255,255,255,0.72);
+    }
+    .tdm-marker {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #162746;
+      border: 2px solid #c6a45d;
+      box-shadow: 0 4px 12px rgba(22, 39, 70, 0.28);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .tdm-marker.small {
+      width: 22px;
+      height: 22px;
+      font-size: 10px;
+      border-width: 2px;
+    }
+    .leaflet-tooltip.tdm-label {
+      background: rgba(255,255,255,0.9);
+      color: #162746;
+      border: 1px solid rgba(198,164,93,0.55);
+      box-shadow: 0 2px 8px rgba(22,39,70,0.12);
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .leaflet-tooltip-left.tdm-label:before,
+    .leaflet-tooltip-right.tdm-label:before,
+    .leaflet-tooltip-top.tdm-label:before,
+    .leaflet-tooltip-bottom.tdm-label:before {
+      display: none;
+    }
+    .leaflet-popup-content-wrapper {
+      border-radius: 14px;
+      border: 1px solid rgba(198,164,93,0.45);
+      box-shadow: 0 10px 30px rgba(22,39,70,0.20);
+    }
+    .leaflet-popup-content {
+      margin: 12px 14px;
+      min-width: 150px;
+      color: #162746;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .popup-title {
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+    .popup-sub {
+      color: rgba(22,39,70,0.74);
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    const map = L.map('map', {
+      zoomControl: true,
+      scrollWheelZoom: true,
+      worldCopyJump: false,
+      minZoom: 3,
+      maxZoom: 12
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 20
+    }).addTo(map);
+
+    const navy = '#162746';
+    const gold = '#c6a45d';
+    const goldSoft = '#d6bd7d';
+    const flightGold = '#b9934b';
+
+    const stops = [
+      {n:'01', name:'인천', sub:'2/22 출발 · 3/17 도착', lat:37.4602, lng:126.4407, label:'Incheon'},
+      {n:'02', name:'이스탄불', sub:'경유 · 3/10–3/17 연장 체류', lat:41.0082, lng:28.9784, label:'Istanbul'},
+      {n:'03', name:'암만', sub:'2/22–2/24 숙박 베이스', lat:31.9539, lng:35.9106, label:'Amman'},
+      {n:'04', name:'제라시', sub:'2/23 핵심 경유지', lat:32.2747, lng:35.8913, label:'Jerash', small:true},
+      {n:'05', name:'마다바', sub:'2/24 경유', lat:31.7167, lng:35.7939, label:'Madaba', small:true},
+      {n:'06', name:'느보산', sub:'2/24 경유', lat:31.7683, lng:35.7256, label:'Mt. Nebo', small:true},
+      {n:'07', name:'사해', sub:'2/24 1박', lat:31.5590, lng:35.4732, label:'Dead Sea'},
+      {n:'08', name:'페트라', sub:'2/25–2/27 숙박 베이스', lat:30.3285, lng:35.4444, label:'Petra'},
+      {n:'09', name:'와디럼', sub:'2/27 1박', lat:29.5321, lng:35.4219, label:'Wadi Rum'},
+      {n:'10', name:'아카바', sub:'2/28 카이로행 항공 이동', lat:29.6116, lng:35.0181, label:'Aqaba', small:true},
+      {n:'11', name:'카이로', sub:'2/28–3/5 숙박 베이스', lat:30.0444, lng:31.2357, label:'Cairo'},
+      {n:'12', name:'사카라 · 멤피스', sub:'3/1 핵심 경유지', lat:29.8570, lng:31.2320, label:'Saqqara · Memphis', small:true},
+      {n:'13', name:'아스완', sub:'3/5 1박 · 3/6 크루즈 승선', lat:24.0889, lng:32.8998, label:'Aswan'},
+      {n:'14', name:'콤옴보', sub:'3/7 크루즈 경유', lat:24.4520, lng:32.9283, label:'Kom Ombo', small:true},
+      {n:'15', name:'에드푸', sub:'3/8 크루즈 경유', lat:24.9781, lng:32.8789, label:'Edfu', small:true},
+      {n:'16', name:'룩소르', sub:'3/9 관광 · 3/10 출발', lat:25.6872, lng:32.6396, label:'Luxor'}
+    ];
+
+    function markerIcon(stop) {
+      const cls = stop.small ? 'tdm-marker small' : 'tdm-marker';
+      return L.divIcon({
+        className: '',
+        html: `<div class="${cls}">${stop.n}</div>`,
+        iconSize: stop.small ? [26,26] : [32,32],
+        iconAnchor: stop.small ? [13,13] : [16,16],
+        popupAnchor: [0, -14]
+      });
+    }
+
+    stops.forEach(s => {
+      const marker = L.marker([s.lat, s.lng], { icon: markerIcon(s) }).addTo(map);
+      marker.bindPopup(`<div class="popup-title">${s.name}</div><div class="popup-sub">${s.sub}</div>`);
+      marker.bindTooltip(s.label, {
+        permanent: false,
+        direction: 'top',
+        offset: [0, -18],
+        className: 'tdm-label',
+        opacity: 1
+      });
+    });
+
+    function addLine(points, opts) {
+      return L.polyline(points, Object.assign({
+        color: gold,
+        weight: 3.5,
+        opacity: 0.96,
+        lineCap: 'round',
+        lineJoin: 'round'
+      }, opts)).addTo(map);
+    }
+
+    // 차량 이동: 골드 실선
+    addLine([
+      [31.9539,35.9106], [32.2747,35.8913], [31.9539,35.9106],
+      [31.7167,35.7939], [31.7683,35.7256], [31.5590,35.4732],
+      [30.3285,35.4444], [29.5321,35.4219], [29.6116,35.0181]
+    ], { color: gold, weight: 4.2, opacity: 0.95 });
+
+    addLine([
+      [30.0444,31.2357], [29.8570,31.2320], [30.0444,31.2357]
+    ], { color: gold, weight: 4.2, opacity: 0.95 });
+
+    // 나일 크루즈: 골드 계열 실선, 약간 더 부드럽게
+    addLine([
+      [24.0889,32.8998], [24.4520,32.9283], [24.9781,32.8789], [25.6872,32.6396]
+    ], { color: goldSoft, weight: 4.5, opacity: 0.95 });
+
+    // 항공 이동: 명확한 점선/긴 대시 패턴
+    const flightStyle = { color: flightGold, weight: 3.2, opacity: 0.92, dashArray: '2 9', lineCap: 'round' };
+    addLine([[37.4602,126.4407], [41.0082,28.9784], [31.9539,35.9106]], flightStyle);
+    addLine([[29.6116,35.0181], [30.0444,31.2357]], flightStyle);
+    addLine([[30.0444,31.2357], [24.0889,32.8998]], flightStyle);
+    addLine([[25.6872,32.6396], [30.0444,31.2357], [41.0082,28.9784]], flightStyle);
+    addLine([[41.0082,28.9784], [37.4602,126.4407]], flightStyle);
+
+    const bounds = L.latLngBounds(stops.map(s => [s.lat, s.lng]));
+    map.fitBounds(bounds, { padding: [34, 34] });
+  </script>
+</body>
+</html>

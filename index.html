@@ -4,64 +4,153 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>OJ KIM Route Map</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
-    /* Critical Leaflet fallback CSS: prevents tile images from appearing as a broken grid if CDN CSS is blocked/late */
-    .leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container,.leaflet-pane>svg,.leaflet-pane>canvas,.leaflet-zoom-box,.leaflet-image-layer,.leaflet-layer{position:absolute;left:0;top:0}.leaflet-container{overflow:hidden}.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-user-drag:none}.leaflet-tile::selection{background:transparent}.leaflet-safari .leaflet-tile{image-rendering:-webkit-optimize-contrast}.leaflet-marker-icon,.leaflet-marker-shadow{display:block}.leaflet-container .leaflet-overlay-pane svg{max-width:none!important;max-height:none!important}.leaflet-container .leaflet-marker-pane img,.leaflet-container .leaflet-shadow-pane img,.leaflet-container .leaflet-tile-pane img,.leaflet-container img.leaflet-image-layer,.leaflet-container .leaflet-tile{max-width:none!important;max-height:none!important;width:auto;padding:0}.leaflet-tile{filter:inherit;visibility:hidden}.leaflet-tile-loaded{visibility:inherit}.leaflet-zoom-box{width:0;height:0;box-sizing:border-box;z-index:800}.leaflet-overlay-pane svg{-moz-user-select:none}.leaflet-pane{z-index:400}.leaflet-tile-pane{z-index:200}.leaflet-overlay-pane{z-index:400}.leaflet-shadow-pane{z-index:500}.leaflet-marker-pane{z-index:600}.leaflet-tooltip-pane{z-index:650}.leaflet-popup-pane{z-index:700}.leaflet-map-pane canvas{z-index:100}.leaflet-map-pane svg{z-index:200}.leaflet-vml-shape{width:1px;height:1px}.lvml{behavior:url(#default#VML);display:inline-block;position:absolute}.leaflet-control{position:relative;z-index:800;pointer-events:visiblePainted;pointer-events:auto}.leaflet-top,.leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}.leaflet-top{top:0}.leaflet-right{right:0}.leaflet-bottom{bottom:0}.leaflet-left{left:0}.leaflet-control{float:left;clear:both}.leaflet-right .leaflet-control{float:right}.leaflet-top .leaflet-control{margin-top:10px}.leaflet-bottom .leaflet-control{margin-bottom:10px}.leaflet-left .leaflet-control{margin-left:10px}.leaflet-right .leaflet-control{margin-right:10px}.leaflet-fade-anim .leaflet-popup{opacity:0;transition:opacity .2s linear}.leaflet-fade-anim .leaflet-map-pane .leaflet-popup{opacity:1}.leaflet-zoom-animated{transform-origin:0 0}.leaflet-zoom-anim .leaflet-zoom-animated{will-change:transform}.leaflet-zoom-anim .leaflet-zoom-animated{transition:transform .25s cubic-bezier(0,0,.25,1)}.leaflet-interactive{cursor:pointer}.leaflet-grab{cursor:grab}.leaflet-dragging .leaflet-grab{cursor:move;cursor:grabbing}.leaflet-container{background:#ddd;outline-offset:1px}.leaflet-control-zoom a{font:bold 18px 'Lucida Console',Monaco,monospace;text-indent:1px}.leaflet-control-zoom-in,.leaflet-control-zoom-out{font-size:22px}.leaflet-bar{box-shadow:0 1px 5px rgba(0,0,0,.2);border-radius:4px}.leaflet-bar a{background-color:#fff;border-bottom:1px solid #ccc;width:26px;height:26px;line-height:26px;display:block;text-align:center;text-decoration:none;color:black}.leaflet-bar a:hover{background-color:#f4f4f4}.leaflet-bar a:first-child{border-top-left-radius:4px;border-top-right-radius:4px}.leaflet-bar a:last-child{border-bottom-left-radius:4px;border-bottom-right-radius:4px;border-bottom:none}.leaflet-control-attribution{background:#fff;background:rgba(255,255,255,.8);margin:0}.leaflet-control-attribution a{text-decoration:none}.leaflet-popup{position:absolute;text-align:center;margin-bottom:20px}.leaflet-popup-content-wrapper{padding:1px;text-align:left;border-radius:12px}.leaflet-popup-content{margin:13px 24px 13px 20px;line-height:1.3;min-height:1px}.leaflet-popup-tip-container{width:40px;height:20px;position:absolute;left:50%;margin-top:-1px;margin-left:-20px;overflow:hidden;pointer-events:none}.leaflet-popup-tip{width:17px;height:17px;padding:1px;margin:-10px auto 0;pointer-events:auto;transform:rotate(45deg)}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:white;color:#333;box-shadow:0 3px 14px rgba(0,0,0,.4)}.leaflet-tooltip{position:absolute;padding:6px;background-color:#fff;border:1px solid #fff;border-radius:3px;color:#222;white-space:nowrap;user-select:none;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,.4)}.leaflet-tooltip.leaflet-interactive{cursor:pointer;pointer-events:auto}.leaflet-tooltip-top:before,.leaflet-tooltip-bottom:before,.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{position:absolute;pointer-events:none;border:6px solid transparent;background:transparent;content:""}.leaflet-tooltip-bottom{margin-top:6px}.leaflet-tooltip-top{margin-top:-6px}.leaflet-tooltip-top:before{bottom:0;margin-bottom:-12px;border-top-color:#fff}.leaflet-tooltip-bottom:before{top:0;margin-top:-12px;margin-left:-6px;border-bottom-color:#fff}
+    /* Leaflet core CSS inlined for GitHub Pages / Notion Embed stability */
+    .leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container,.leaflet-pane>svg,.leaflet-pane>canvas,.leaflet-zoom-box,.leaflet-image-layer,.leaflet-layer{position:absolute;left:0;top:0}.leaflet-container{overflow:hidden}.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-user-drag:none}.leaflet-tile::selection{background:transparent}.leaflet-safari .leaflet-tile{image-rendering:-webkit-optimize-contrast}.leaflet-safari .leaflet-tile-container{width:1600px;height:1600px;-webkit-transform-origin:0 0}.leaflet-marker-icon,.leaflet-marker-shadow{display:block}.leaflet-container .leaflet-overlay-pane svg{max-width:none!important;max-height:none!important}.leaflet-container .leaflet-marker-pane img,.leaflet-container .leaflet-shadow-pane img,.leaflet-container .leaflet-tile-pane img,.leaflet-container img.leaflet-image-layer,.leaflet-container .leaflet-tile{max-width:none!important;max-height:none!important;width:auto;padding:0}.leaflet-container img.leaflet-tile{mix-blend-mode:normal}.leaflet-container.leaflet-touch-zoom{touch-action:pan-x pan-y}.leaflet-container.leaflet-touch-drag{touch-action:pinch-zoom}.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom{touch-action:none}.leaflet-container{-webkit-tap-highlight-color:transparent}.leaflet-container a{-webkit-tap-highlight-color:rgba(51,181,229,.4)}.leaflet-tile{filter:inherit;visibility:hidden}.leaflet-tile-loaded{visibility:inherit}.leaflet-zoom-box{width:0;height:0;box-sizing:border-box;z-index:800}.leaflet-overlay-pane svg{-moz-user-select:none}.leaflet-pane{z-index:400}.leaflet-tile-pane{z-index:200}.leaflet-overlay-pane{z-index:400}.leaflet-shadow-pane{z-index:500}.leaflet-marker-pane{z-index:600}.leaflet-tooltip-pane{z-index:650}.leaflet-popup-pane{z-index:700}.leaflet-map-pane canvas{z-index:100}.leaflet-map-pane svg{z-index:200}.leaflet-vml-shape{width:1px;height:1px}.lvml{behavior:url(#default#VML);display:inline-block;position:absolute}.leaflet-control{position:relative;z-index:800;pointer-events:visiblePainted;pointer-events:auto}.leaflet-top,.leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}.leaflet-top{top:0}.leaflet-right{right:0}.leaflet-bottom{bottom:0}.leaflet-left{left:0}.leaflet-control{float:left;clear:both}.leaflet-right .leaflet-control{float:right}.leaflet-top .leaflet-control{margin-top:10px}.leaflet-bottom .leaflet-control{margin-bottom:10px}.leaflet-left .leaflet-control{margin-left:10px}.leaflet-right .leaflet-control{margin-right:10px}.leaflet-fade-anim .leaflet-popup{opacity:0;transition:opacity .2s linear}.leaflet-fade-anim .leaflet-map-pane .leaflet-popup{opacity:1}.leaflet-zoom-animated{transform-origin:0 0}.leaflet-zoom-anim .leaflet-zoom-animated{will-change:transform;transition:transform .25s cubic-bezier(0,0,.25,1)}.leaflet-zoom-anim .leaflet-tile,.leaflet-pan-anim .leaflet-tile{transition:none}.leaflet-zoom-anim .leaflet-zoom-hide{visibility:hidden}.leaflet-interactive{cursor:pointer}.leaflet-grab{cursor:-webkit-grab;cursor:-moz-grab;cursor:grab}.leaflet-crosshair,.leaflet-crosshair .leaflet-interactive{cursor:crosshair}.leaflet-popup-pane,.leaflet-control{cursor:auto}.leaflet-dragging .leaflet-grab,.leaflet-dragging .leaflet-grab .leaflet-interactive,.leaflet-dragging .leaflet-marker-draggable{cursor:move;cursor:-webkit-grabbing;cursor:-moz-grabbing;cursor:grabbing}.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-image-layer,.leaflet-pane>svg path,.leaflet-tile-container{pointer-events:none}.leaflet-marker-icon.leaflet-interactive,.leaflet-image-layer.leaflet-interactive,.leaflet-pane>svg path.leaflet-interactive,svg.leaflet-image-layer.leaflet-interactive path{pointer-events:visiblePainted;pointer-events:auto}.leaflet-container{background:#f7f4ee;outline-offset:1px}.leaflet-container a{color:#233c68}.leaflet-zoom-box{border:2px dotted #233c68;background:rgba(255,255,255,.5)}.leaflet-container{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;font-size:12px;line-height:1.5}.leaflet-bar{box-shadow:0 1px 5px rgba(0,0,0,.14);border-radius:0}.leaflet-bar a{background-color:#fff;border-bottom:1px solid #d0d0d0;width:28px;height:28px;line-height:28px;display:block;text-align:center;text-decoration:none;color:#1e2b44}.leaflet-bar a:hover{background-color:#f4f4f4}.leaflet-bar a:first-child{border-top-left-radius:0;border-top-right-radius:0}.leaflet-bar a:last-child{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:none}.leaflet-control-attribution{background:rgba(255,255,255,.78);margin:0;font-size:10px;color:#53606f}.leaflet-control-attribution a{color:#233c68;text-decoration:none}.leaflet-popup{position:absolute;text-align:center;margin-bottom:20px}.leaflet-popup-content-wrapper{padding:1px;text-align:left;border-radius:0;background:#fff;color:#1e2b44;box-shadow:0 3px 14px rgba(0,0,0,.14)}.leaflet-popup-content{margin:10px 12px;line-height:1.4;font-size:12px}.leaflet-popup-tip-container{width:40px;height:20px;position:absolute;left:50%;margin-left:-20px;overflow:hidden;pointer-events:none}.leaflet-popup-tip{width:17px;height:17px;padding:1px;margin:-10px auto 0;transform:rotate(45deg);background:#fff;box-shadow:0 3px 14px rgba(0,0,0,.14)}.leaflet-popup-close-button{display:none}.leaflet-tooltip{position:absolute;padding:4px 7px;background:rgba(255,255,255,.9);border:1px solid rgba(190,161,96,.45);border-radius:0;color:#162746;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.09);font-size:11px;font-weight:600;letter-spacing:-.01em}.leaflet-tooltip-top:before,.leaflet-tooltip-bottom:before,.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{display:none}
 
-    html, body { width:100%; height:100%; margin:0; padding:0; overflow:hidden; background:#f7f4ee; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR","Apple SD Gothic Neo",sans-serif; }
-    #map { position:fixed; inset:0; width:100vw; height:100vh; min-height:360px; background:#f7f4ee; }
-    .leaflet-container { width:100%; height:100%; background:#f7f4ee; font-family:inherit; }
-    .leaflet-control-zoom a { color:#162746; border:none; background:rgba(255,255,255,0.94); }
-    .leaflet-control-attribution { font-size:10px; color:rgba(22,39,70,0.6); background:rgba(255,255,255,0.72); }
-    .tdm-marker { width:28px; height:28px; border-radius:50%; background:#162746; border:2px solid #c6a45d; box-shadow:0 4px 12px rgba(22,39,70,0.28); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; letter-spacing:-0.02em; }
-    .tdm-marker.small { width:22px; height:22px; font-size:10px; border-width:2px; }
-    .leaflet-tooltip.tdm-label { background:rgba(255,255,255,0.92); color:#162746; border:1px solid rgba(198,164,93,0.55); box-shadow:0 2px 8px rgba(22,39,70,0.12); border-radius:999px; padding:4px 8px; font-size:11px; font-weight:700; letter-spacing:-0.02em; }
-    .leaflet-popup-content-wrapper { border-radius:12px; box-shadow:0 8px 24px rgba(22,39,70,0.18); }
-    .leaflet-popup-content { margin:12px 14px; min-width:150px; color:#162746; font-size:12px; line-height:1.45; }
-    .popup-title { font-weight:800; margin-bottom:3px; }
-    .popup-sub { color:rgba(22,39,70,0.74); }
+    html, body { width:100%; height:100%; margin:0; padding:0; background:#f7f4ee; overflow:hidden; }
+    #map { width:100vw; height:100vh; background:#f7f4ee; }
+
+    .tdm-marker { width:17px; height:17px; border-radius:50%; background:#162746; border:2px solid #c4a15a; box-sizing:border-box; box-shadow:0 2px 8px rgba(22,39,70,.25); }
+    .tdm-marker.origin { width:19px; height:19px; background:#162746; border:3px solid #c4a15a; }
+    .tdm-marker.stop { width:14px; height:14px; background:#162746; border:2px solid #c4a15a; opacity:.95; }
+    .tdm-marker.cruise { width:15px; height:15px; background:#162746; border:2px solid #c4a15a; }
+    .tdm-label { color:#162746; font-size:11px; font-weight:700; letter-spacing:-.02em; text-shadow:0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff; }
   </style>
 </head>
 <body>
   <div id="map"></div>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   <script>
-    const navy = '#162746', gold = '#c6a45d', goldSoft = '#d6bd7d', flightGold = '#b9934b';
-    const map = L.map('map', { zoomControl:true, scrollWheelZoom:true, worldCopyJump:false, minZoom:4, maxZoom:12, zoomSnap:0.25 });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution:'&copy; OpenStreetMap contributors &copy; CARTO', subdomains:'abcd', maxZoom:20 }).addTo(map);
-    const stops = [
-      {n:'01', name:'이스탄불', sub:'경유 · 3/10–3/17 연장 체류', lat:41.0082, lng:28.9784, label:'Istanbul'},
-      {n:'02', name:'암만', sub:'2/22–2/24 숙박 베이스', lat:31.9539, lng:35.9106, label:'Amman'},
-      {n:'03', name:'제라시', sub:'2/23 핵심 경유지', lat:32.2747, lng:35.8913, label:'Jerash', small:true},
-      {n:'04', name:'마다바 · 느보산', sub:'2/24 핵심 경유지', lat:31.7430, lng:35.7600, label:'Madaba · Mt. Nebo', small:true},
-      {n:'05', name:'사해', sub:'2/24 1박', lat:31.5590, lng:35.4732, label:'Dead Sea'},
-      {n:'06', name:'페트라', sub:'2/25–2/27 숙박 베이스', lat:30.3285, lng:35.4444, label:'Petra'},
-      {n:'07', name:'와디럼', sub:'2/27 1박', lat:29.5321, lng:35.4219, label:'Wadi Rum'},
-      {n:'08', name:'아카바', sub:'2/28 카이로행 항공 이동', lat:29.6116, lng:35.0181, label:'Aqaba', small:true},
-      {n:'09', name:'카이로', sub:'2/28–3/5 숙박 베이스', lat:30.0444, lng:31.2357, label:'Cairo'},
-      {n:'10', name:'사카라 · 멤피스', sub:'3/1 핵심 경유지', lat:29.8570, lng:31.2320, label:'Saqqara · Memphis', small:true},
-      {n:'11', name:'아스완', sub:'3/5 1박 · 3/6 크루즈 승선', lat:24.0889, lng:32.8998, label:'Aswan'},
-      {n:'12', name:'콤옴보', sub:'3/7 크루즈 경유', lat:24.4520, lng:32.9283, label:'Kom Ombo', small:true},
-      {n:'13', name:'에드푸', sub:'3/8 크루즈 경유', lat:24.9781, lng:32.8789, label:'Edfu', small:true},
-      {n:'14', name:'룩소르', sub:'3/9 관광 · 3/10 출발', lat:25.6872, lng:32.6396, label:'Luxor'}
-    ];
-    function markerIcon(stop){ const cls=stop.small?'tdm-marker small':'tdm-marker'; return L.divIcon({ className:'', html:`<div class="${cls}">${stop.n}</div>`, iconSize:stop.small?[26,26]:[32,32], iconAnchor:stop.small?[13,13]:[16,16], popupAnchor:[0,-14] }); }
-    stops.forEach(s=>{ const marker=L.marker([s.lat,s.lng],{icon:markerIcon(s)}).addTo(map); marker.bindPopup(`<div class="popup-title">${s.name}</div><div class="popup-sub">${s.sub}</div>`); marker.bindTooltip(s.label,{permanent:false,direction:'top',offset:[0,-18],className:'tdm-label',opacity:1}); });
-    function addLine(points,opts){ return L.polyline(points,Object.assign({color:gold,weight:3.8,opacity:0.96,lineCap:'round',lineJoin:'round'},opts)).addTo(map); }
-    addLine([[31.9539,35.9106],[32.2747,35.8913],[31.9539,35.9106],[31.7430,35.7600],[31.5590,35.4732],[30.3285,35.4444],[29.5321,35.4219],[29.6116,35.0181]],{color:gold,weight:4.2,opacity:0.95});
-    addLine([[30.0444,31.2357],[29.8570,31.2320],[30.0444,31.2357]],{color:gold,weight:4.2,opacity:0.95});
-    addLine([[24.0889,32.8998],[24.4520,32.9283],[24.9781,32.8789],[25.6872,32.6396]],{color:goldSoft,weight:4.5,opacity:0.96});
-    const flightStyle={color:flightGold,weight:3.2,opacity:0.92,dashArray:'2 9',lineCap:'round'};
-    addLine([[41.0082,28.9784],[31.9539,35.9106]],flightStyle);
-    addLine([[29.6116,35.0181],[30.0444,31.2357]],flightStyle);
-    addLine([[30.0444,31.2357],[24.0889,32.8998]],flightStyle);
-    addLine([[25.6872,32.6396],[30.0444,31.2357],[41.0082,28.9784]],flightStyle);
-    const bounds = L.latLngBounds(stops.map(s=>[s.lat,s.lng]));
-    function refit(){ map.invalidateSize(true); map.fitBounds(bounds,{padding:[36,36],maxZoom:6.1}); }
-    map.whenReady(refit);
-    window.addEventListener('load',()=>{ refit(); setTimeout(refit,300); setTimeout(refit,900); });
-    window.addEventListener('resize',()=>setTimeout(refit,150));
+    const navy = '#162746';
+    const gold = '#b89a5e';
+    const goldLight = '#d4be88';
+
+    const map = L.map('map', {
+      zoomControl: false,
+      attributionControl: true,
+      scrollWheelZoom: true,
+      dragging: true,
+      doubleClickZoom: false,
+      boxZoom: false,
+      keyboard: false,
+      preferCanvas: true
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+      maxZoom: 18,
+      minZoom: 3,
+      detectRetina: true,
+      attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+    }).addTo(map);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+      maxZoom: 18,
+      minZoom: 3,
+      detectRetina: true,
+      pane: 'markerPane'
+    }).addTo(map);
+
+    const points = {
+      istanbul: [41.0082, 28.9784],
+      amman: [31.9539, 35.9106],
+      jerash: [32.2747, 35.8914],
+      madaba: [31.7195, 35.7941],
+      nebo: [31.7651, 35.7258],
+      deadsea: [31.5590, 35.4732],
+      petra: [30.3285, 35.4444],
+      wadirum: [29.5767, 35.4194],
+      aqaba: [29.5319, 35.0061],
+      cairo: [30.0444, 31.2357],
+      saqqara: [29.8713, 31.2165],
+      aswan: [24.0889, 32.8998],
+      komombo: [24.4521, 32.9286],
+      edfu: [24.9781, 32.8734],
+      luxor: [25.6872, 32.6396]
+    };
+
+    const markerStyle = (type='base') => L.divIcon({
+      className: '',
+      html: `<div class="tdm-marker ${type}"></div>`,
+      iconSize: type === 'origin' ? [19,19] : [17,17],
+      iconAnchor: type === 'origin' ? [9.5,9.5] : [8.5,8.5]
+    });
+
+    function addMarker(key, label, type='base', direction='top') {
+      const m = L.marker(points[key], { icon: markerStyle(type), title: label }).addTo(map);
+      m.bindTooltip(label, { permanent: true, direction, className: 'tdm-label', offset: [0, -2] });
+      return m;
+    }
+
+    // Core route markers only: no hotel pins, no dense city-inside sightseeing pins.
+    addMarker('istanbul', 'Istanbul', 'origin', 'top');
+    addMarker('amman', 'Amman', 'base', 'right');
+    addMarker('jerash', 'Jerash', 'stop', 'right');
+    addMarker('deadsea', 'Dead Sea', 'base', 'left');
+    addMarker('petra', 'Petra', 'base', 'left');
+    addMarker('wadirum', 'Wadi Rum', 'base', 'left');
+    addMarker('aqaba', 'Aqaba', 'stop', 'bottom');
+    addMarker('cairo', 'Cairo', 'origin', 'right');
+    addMarker('saqqara', 'Saqqara / Memphis', 'stop', 'left');
+    addMarker('aswan', 'Aswan', 'base', 'right');
+    addMarker('komombo', 'Kom Ombo', 'cruise', 'right');
+    addMarker('edfu', 'Edfu', 'cruise', 'right');
+    addMarker('luxor', 'Luxor', 'origin', 'right');
+
+    function route(coords, options) {
+      return L.polyline(coords, Object.assign({
+        color: gold,
+        weight: 3,
+        opacity: .92,
+        lineCap: 'round',
+        lineJoin: 'round',
+        interactive: false
+      }, options)).addTo(map);
+    }
+
+    // Air: clearer dotted route pattern.
+    route([points.istanbul, points.amman], { dashArray: '2 10', weight: 3, opacity: .85 });
+    route([points.aqaba, points.cairo], { dashArray: '2 10', weight: 3, opacity: .85 });
+    route([points.cairo, points.aswan], { dashArray: '2 10', weight: 3, opacity: .85 });
+    route([points.luxor, points.cairo], { dashArray: '2 10', weight: 3, opacity: .85 });
+    route([points.cairo, points.istanbul], { dashArray: '2 10', weight: 3, opacity: .85 });
+
+    // Vehicle: gold solid line.
+    route([points.amman, points.jerash, points.amman], { weight: 3.2 });
+    route([points.amman, points.madaba, points.nebo, points.deadsea, points.petra, points.wadirum, points.aqaba], { weight: 3.2 });
+    route([points.cairo, points.saqqara, points.cairo], { weight: 3.2 });
+
+    // Nile cruise: gold line, slightly softer.
+    route([points.aswan, points.komombo, points.edfu, points.luxor], { color: goldLight, weight: 4, opacity: .95 });
+
+    const bounds = L.latLngBounds([
+      points.istanbul,
+      points.amman,
+      points.jerash,
+      points.deadsea,
+      points.petra,
+      points.wadirum,
+      points.aqaba,
+      points.cairo,
+      points.saqqara,
+      points.aswan,
+      points.komombo,
+      points.edfu,
+      points.luxor
+    ]);
+
+    function fit() {
+      map.invalidateSize(true);
+      map.fitBounds(bounds, { padding: [46, 46], maxZoom: 6 });
+    }
+
+    map.whenReady(() => {
+      fit();
+      setTimeout(fit, 150);
+      setTimeout(fit, 600);
+    });
+    window.addEventListener('resize', () => setTimeout(fit, 120));
   </script>
 </body>
 </html>
